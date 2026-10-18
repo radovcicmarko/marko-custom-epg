@@ -81,15 +81,14 @@ ALIAS = {
     "LA LIGA HD": "LaLigaTV.uk",
     "LA LIGA SD": "LaLigaTV.uk",
     "RACING UK FHD": "RacingTV.uk",
-    " RACING UK FHD": "RacingTV.uk",
-    " RACING UK HD": "RacingTV.uk",
-    " RACING UK SD": "RacingTV.uk",
+    "RACING UK HD": "RacingTV.uk",
+    "RACING UK SD": "RacingTV.uk",
     "EUROSPORT 1 SD": "UKEurosport1.uk",
     "EUROSPORT 2 SD": "UKEurosport2.uk",
     "HORSE AND COUNTRY SD": "HorseAndCountry.uk",
-    " HORSE AND COUNTRY": "HorseAndCountry.uk",
-    " PDC DARTS 1  - LIVE EVENTS ONLY": "PDC1.uk",
-    " PDC DARTS 2  - LIVE EVENTS ONLY": "PDC2.uk",
+    "HORSE AND COUNTRY": "HorseAndCountry.uk",
+    "PDC DARTS 1  - LIVE EVENTS ONLY": "PDC1.uk",
+    "PDC DARTS 2  - LIVE EVENTS ONLY": "PDC2.uk",
     # Sport - Strano (US)
     "BEIN SPORTS HD": "beINSports.us",
     "WILLOW CRICKET HD": "WillowSports.us",
@@ -180,7 +179,7 @@ def main():
     seen = set()
     with open(args.m3u, encoding='utf-8') as f:
         for line in f:
-            m = re.match(r'#EXTINF:-1 group-title="([^"]+)",(.*)', line.rstrip('\n'))
+            m = re.match(r'#EXTINF:-1 .*group-title="([^"]+)",(.*)', line.rstrip('\n'))
             if not m:
                 continue
             g, name = m.group(1), m.group(2)

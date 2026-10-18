@@ -27,6 +27,10 @@ SPORTS_PAT = re.compile(
 ORDER = ["Hrvatska", "Bosna i Hercegovina", "Srbija", "Sport", "Sport - Strano",
          "Dokumentarci", "Vijesti", "Muzika", "Filmovi", "Serije", "Dječiji", "Ostalo"]
 
+# EPG source advertised via x-tvg-url so players (TiviMate, etc.) auto-load it.
+# Update if the repository or branch changes.
+EPG_URL = "https://raw.githubusercontent.com/radovcicmarko/marko-custom-epg/refs/heads/main/epg.xml"
+
 
 def cat_exyu(name):
     n = name.lower()
@@ -74,7 +78,7 @@ def build(source, out):
     while i < len(lines):
         m = re.match(r"#EXTINF:-1,([A-Za-z0-9]+) \u2605 (.*)$", lines[i])
         if m:
-            prefix, name = m.group(1), m.group(2)
+            prefix, name = m.group(1), m.group(2).strip().replace('"', "'")
             url = lines[i + 1] if i + 1 < len(lines) else ""
             if prefix in TARGET:
                 group = COUNTRY_GROUP.get(prefix) or cat_exyu(name)
@@ -86,11 +90,12 @@ def build(source, out):
             i += 1
 
     with open(out, "w", encoding="utf-8") as f:
-        f.write("#EXTM3U\n")
+        f.write('#EXTM3U x-tvg-url="%s"\n' % EPG_URL)
         total = 0
         for g in ORDER:
             for name, url in entries[g]:
-                f.write(f'#EXTINF:-1 group-title="{g}",{name}\n{url}\n')
+                f.write('#EXTINF:-1 tvg-id="%s" tvg-name="%s" group-title="%s",%s\n%s\n'
+                        % (name, name, g, name, url))
                 total += 1
     for g in ORDER:
         print(f"{g:22} {len(entries[g])}")

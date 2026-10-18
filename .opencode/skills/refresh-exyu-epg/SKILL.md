@@ -8,9 +8,17 @@ description: Refresh the ex-YU IPTV playlist (exyu.m3u) and its filtered XMLTV g
 This skill rebuilds two files that must stay in sync:
 
 - `exyu.m3u` — filtered playlist (Croatian, Bosnian, Serbian and EXYU channels +
-  British/US sports). **Gitignored** (`*.m3u`), never committed.
-- `epg.xml` — XMLTV guide filtered to the playlist's channels, with channel
-  names rewritten to match the playlist exactly. **Committed** to git.
+  British/US sports). **Gitignored** (`*.m3u`), never committed. Each entry
+  carries `tvg-id`/`tvg-name` set to the channel name, and the header advertises
+  `x-tvg-url` pointing at the published `epg.xml`.
+- `epg.xml` — XMLTV guide filtered to the playlist's channels. **Committed** to
+  git. Channel `id` (and `display-name`) equal the playlist `tvg-id`, which is
+  also the channel name.
+
+Players such as **TiviMate match EPG to channels strictly by `tvg-id`** (an
+exact, case-sensitive string match against the XMLTV `<channel id>`), so the
+playlist MUST carry `tvg-id`; a missing `tvg-id` means no guide, even when the
+EPG file itself loads. Do not strip the tags when editing the playlist builder.
 
 ## Sources
 
